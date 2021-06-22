@@ -1,21 +1,23 @@
 # CoursePortal
 ![Screenshot](app.png)
 
-
+***
 # Tools and Tech
 
-    1) spring-boot-starter-web 
-    2) spring-boot-starter-test
-    3) vertx-web
-    4) hikariCp  [ Connection Pooling ]
-    5) junit
-    6) logback-classic
-    7) apache-commons
-    5) postregsql [ JDBC client ]
-
+   > spring-boot-starter-web <br>
+   > spring-boot-starter-test <br>
+   > vertx-web <br>
+   > hikariCp  [ Connection Pooling ] <br>
+   > junit <br>
+   > logback-classic <br>
+   > apache-commons <br>
+   > postregsql [ JDBC client ] <br> 
+***
 # Architecture
 
-  1) All client requests are routed to load balancer. Requests are routed to the application servers based on the configured routing policy.
+  1) All client requests are routed to load balancer. Requests are routed from the load balancer to the application servers. 
+  
+     Load balancer takes care of   distributing the incoming traffic across all the application servers based on the configured routing policy.
      
       ### Advantages of LoadBalancer
       
@@ -50,18 +52,52 @@
         
         2) Reduce request latency by avoiding database call and fetching data directly from cache if it exists
         
-       
+   ***   
    ## ER Diagram
      
   ![Screenshot](ER.png)
-
-   ## init_script.sql
+  ***
+  ## Prerequisites 
+  
+      
+  * Create Tables
+  
+       **init_script.sql**
+    
+          1) This file contains CREATE statements of all the tables required for the application. 
+          2) CREATE statements are tested on PostgreSQL database. 
+          3) Based on relation database type we need to update the CREATE statements. 
    
-   ## deployment.properties 
-   
-   ## Build    
-       Running mvn clean install command will generate a fat jar in ${project.basedir}/build folder.
+  * DB Properties and Application port number
+           
+       **deployment.properties**
+      
+      
+       - Need to configure below properties in deployment.properties file.
+          
+          > server.port=8091 <br>
+          > db.url=          <br>
+          > db.username=     <br>
+          > db.password =    <br>
+          > db.driver.class.name=   <br>
+          > db.connection.pool.size=    <br>
+          
+       - deployment.properties files is present in resources folder.
+              
+   * JDBC Driver
         
+        - Need to add required JDBC driver dependency in pom.xml file. By default application is configured with postgresql driver.
+        
+   ***
+   ## Build    
+         
+   - **mvn clean install**
+            
+         This command will generate the application fat jar in ${project.basedir}/build folder.
+            
+   
+    
+   ***
    ## Running the application 
         
         java -jar {artifactId}-{version}-fat.jar
