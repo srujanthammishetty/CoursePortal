@@ -1,5 +1,5 @@
 # CoursePortal
-![Screenshot](application.png)
+![Screenshot](app.png)
 
 
 # Tools and Tech
