@@ -17,8 +17,7 @@ CREATE TABLE courses (
 CREATE TABLE subjects (
     subject_id SERIAL UNIQUE,
     name text PRIMARY KEY,
-    user_id bigint, FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    is_active boolean DEFAULT true
+    user_id bigint, FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 
@@ -41,8 +40,7 @@ CREATE TABLE videos (
 CREATE TABLE tags (
     tag_id SERIAL UNIQUE,
     title text PRIMARY KEY,
-    user_id bigint, FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    is_active boolean DEFAULT true
+    user_id bigint, FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 
@@ -93,7 +91,6 @@ CREATE TABLE student_courses (
     id SERIAL,
     user_id bigint ,
     course_id bigint ,
-    subcribe_status boolean DEFAULT true,
     PRIMARY KEY (user_id, course_id),
     FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     FOREIGN KEY(course_id) REFERENCES courses(course_id) ON DELETE CASCADE

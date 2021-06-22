@@ -4,11 +4,9 @@ import com.proximity.assignment.commons.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ResourceUtils;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 /**
@@ -21,19 +19,18 @@ public class PropertiesService {
     public static synchronized void loadPropertiesFromFileSystem() {
         if (deploymentProperties == null) {
             deploymentProperties = new Properties();
-            InputStream inputStream = null;
+            InputStreamReader inputStreamReader = null;
             try {
-                File file = ResourceUtils.getFile("classpath:" + Constants.DEPLOYMENT_PROPERTIES);
-                inputStream = new FileInputStream(file);
-                deploymentProperties.load(inputStream);
+                inputStreamReader = new InputStreamReader(new ClassPathResource(Constants.DEPLOYMENT_PROPERTIES).getInputStream());
+                deploymentProperties.load(inputStreamReader);
             } catch (Exception e) {
                 String msg = "Error loading application deployment properties";
                 LOGGER.error(msg, e);
                 throw new RuntimeException(msg, e);
             } finally {
-                if (inputStream != null) {
+                if (inputStreamReader != null) {
                     try {
-                        inputStream.close();
+                        inputStreamReader.close();
                     } catch (Exception e) {
                         LOGGER.error("Error closing file inputstream", e);
                     }

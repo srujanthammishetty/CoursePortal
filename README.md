@@ -34,8 +34,8 @@
   
   3)  As the application is read-intensive application, we deploy a database cluster which follows master-slave architecture.
       
-       ### Advantages of master-slave cluster
-        
+        ### Advantages of master-slave cluster
+       
          1) All write requests are directed to master node.
          
          2) All read requests are directed to slave nodes, to reduce latency of read requests.
@@ -50,10 +50,20 @@
         
         2) Reduce request latency by avoiding database call and fetching data directly from cache if it exists
         
-        
-   ### Things to take care
-        
-        1) Need to integrate with cloud providers like AWS / Azure which helps to seamlessly scale our application and duplicate the data across different regions.
-        
        
+   ## ER Diagram
+     
+  ![Screenshot](ER.png)
+
+   ## init_script.sql
+   
+   ## deployment.properties 
+   
+   ## Build    
+       Running mvn clean install command will generate a fat jar in ${project.basedir}/build folder.
+        
+   ## Running the application 
+        
+        java -jar {artifactId}-{version}-fat.jar
+   
         
