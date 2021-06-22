@@ -3,7 +3,7 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
-                [%-5p %d{yyyy-MM-dd HH:mm:ss.SSS} %50logger{50}] [threadId:%t] [userId:%X{userId}] : %message%n%xException
+                [%-5p %d{yyyy-MM-dd HH:mm:ss.SSS} %50logger{50}] [threadId:%t] [userId: %X{userId}] : %message%n%xException
             </pattern>
         </encoder>
     </appender>

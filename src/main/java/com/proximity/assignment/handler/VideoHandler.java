@@ -123,7 +123,7 @@ public class VideoHandler implements Handler<RoutingContext> {
         Response response = new Response();
         Long videoId = Utils.getVideoIdFromHeader(routingContext);
         videoDAO.deleteVideo(videoId);
-        String msg = Utils.getMsg("Video '{}' deleted by user '{}' ", videoId, userId);
+        String msg = Utils.getMsg("Video '{}' deleted by user with userId '{}' ", videoId, userId);
         LOGGER.info(msg);
         response.setResult(msg);
         return response;

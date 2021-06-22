@@ -8,7 +8,7 @@ import com.proximity.assignment.model.Subject;
 public interface SubjectDAO extends AbstractDAO<Subject> {
 
 
-    void createSubject(String name, Long userId);
+    Long createSubject(String name, Long userId);
 
     void deleteSubject(Long subjectId);
 

@@ -31,17 +31,18 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
     }
 
     @Override
-    public void createSubject(String name, Long userId) {
+    public Long createSubject(String name, Long userId) {
         JSONArray params = new JSONArray();
         params.put(0, name);
         params.put(1, userId);
-        DBResult dbResult = DBQueryUtil.createEntity(SubjectConstants.DB_SUBJECTS_TABLE_NAME, Arrays.asList(SubjectConstants.DB_SUBJECT_NAME_COLUMN, Constants.UserConstants.DB_USER_ID_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(SubjectConstants.DB_SUBJECTS_TABLE_NAME, Arrays.asList(SubjectConstants.DB_SUBJECT_NAME_COLUMN, Constants.UserConstants.DB_USER_ID_COLUMN), params, SubjectConstants.DB_SUBJECT_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error creating subject '{}', userId '{}'  ", name, userId);
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
         LOGGER.info("Successfully created subject '{}' by userId : {}", name, userId);
+        return DBQueryUtil.getIdFromResult(dbResult, SubjectConstants.DB_SUBJECT_ID_COLUMN);
     }
 
     @Override
@@ -54,13 +55,13 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
-        LOGGER.info("Successfully deleted subject {}", subjectId);
+        LOGGER.info("Successfully deleted subject with subjectId {}", subjectId);
     }
 
     @Override
     public Subject get(Long id) {
         Subject subject = null;
-        DBResult dbResult = DBQueryUtil.getEntityById(SubjectConstants.DB_SUBJECTS_TABLE_NAME, SubjectConstants.DB_SUBJECT_ID_COLUMN, id);
+        DBResult dbResult = DBQueryUtil.getEntityByEntityId(SubjectConstants.DB_SUBJECTS_TABLE_NAME, SubjectConstants.DB_SUBJECT_ID_COLUMN, id);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error getting details of subject : {}", id);
             LOGGER.error(msg, dbResult.getCause());
@@ -93,7 +94,7 @@ public class SubjectDAOImpl extends AbstractDAOImpl<Subject> implements SubjectD
         JSONArray params = new JSONArray();
         params.put(0, courseId);
         params.put(1, subjectId);
-        DBResult dbResult = DBQueryUtil.createEntity(DB_COURSE_SUBJECT_TABLE_NAME, Arrays.asList(Constants.CourseConstants.DB_COURSE_ID_COLUMN, SubjectConstants.DB_SUBJECT_ID_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(DB_COURSE_SUBJECT_TABLE_NAME, Arrays.asList(Constants.CourseConstants.DB_COURSE_ID_COLUMN, SubjectConstants.DB_SUBJECT_ID_COLUMN), params, Constants.DB_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error adding subject '{}' to course: {}  ", subjectId, courseId);
             LOGGER.error(msg, dbResult.getCause());

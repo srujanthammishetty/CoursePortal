@@ -7,7 +7,7 @@ import com.proximity.assignment.model.Tag;
  */
 public interface TagDAO extends AbstractDAO<Tag> {
 
-    void createTag(String title, Long userId);
+    Long createTag(String title, Long userId);
 
     void deleteTag(Long tagId);
 

@@ -1,4 +1,4 @@
-package com.proximity.assignment.test;
+package com.proximity.assignment.test.config;
 
 import com.proximity.assignment.api.ApplicationConfiguration;
 import org.springframework.context.annotation.ComponentScan;

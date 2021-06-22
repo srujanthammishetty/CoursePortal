@@ -29,19 +29,19 @@ public class VideoDAOImpl extends AbstractDAOImpl<Video> implements VideoDAO {
     }
 
     @Override
-    public void createVideo(String title, String link, Long userId) {
+    public Long createVideo(String title, String link, Long userId) {
         JSONArray params = new JSONArray();
         params.put(0, title);
         params.put(1, link);
         params.put(2, userId);
-        DBResult dbResult = DBQueryUtil.createEntity(VideoConstants.DB_VIDEO_TABLE_NAME, Arrays.asList(VideoConstants.DB_VIDEO_TILE_COLUMN, VideoConstants.DB_VIDEO_LINK_COLUMN, UserConstants.DB_USER_ID_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(VideoConstants.DB_VIDEO_TABLE_NAME, Arrays.asList(VideoConstants.DB_VIDEO_TILE_COLUMN, VideoConstants.DB_VIDEO_LINK_COLUMN, UserConstants.DB_USER_ID_COLUMN), params, VideoConstants.DB_VIDEO_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error creating video with title '{}', link '{}' userId '{}'  ", title, link, userId);
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
         LOGGER.info("Successfully created video with title '{}', link: {} with userId : {}", title, link, userId);
-
+        return DBQueryUtil.getIdFromResult(dbResult, VideoConstants.DB_VIDEO_ID_COLUMN);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class VideoDAOImpl extends AbstractDAOImpl<Video> implements VideoDAO {
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
-        LOGGER.info("Successfully deleted video {}", videoId);
+        LOGGER.info("Successfully deleted video with videoId {}", videoId);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class VideoDAOImpl extends AbstractDAOImpl<Video> implements VideoDAO {
     @Override
     public Video get(Long id) {
         Video video = null;
-        DBResult dbResult = DBQueryUtil.getEntityById(VideoConstants.DB_VIDEO_TABLE_NAME, VideoConstants.DB_VIDEO_ID_COLUMN, id);
+        DBResult dbResult = DBQueryUtil.getEntityByEntityId(VideoConstants.DB_VIDEO_TABLE_NAME, VideoConstants.DB_VIDEO_ID_COLUMN, id);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error getting details of video : {}", id);
             LOGGER.error(msg, dbResult.getCause());
@@ -118,7 +118,7 @@ public class VideoDAOImpl extends AbstractDAOImpl<Video> implements VideoDAO {
         JSONArray params = new JSONArray();
         params.put(0, videoId);
         params.put(1, lessonId);
-        DBResult dbResult = DBQueryUtil.createEntity(DB_VIDEO_LESSONS_TABLE_NAME, Arrays.asList(VideoConstants.DB_VIDEO_ID_COLUMN, LessonConstants.DB_LESSON_ID_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(DB_VIDEO_LESSONS_TABLE_NAME, Arrays.asList(VideoConstants.DB_VIDEO_ID_COLUMN, LessonConstants.DB_LESSON_ID_COLUMN), params, DB_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error adding  video : {} to lesson : {} ", videoId, lessonId);
             LOGGER.error(msg, dbResult.getCause());
@@ -132,7 +132,7 @@ public class VideoDAOImpl extends AbstractDAOImpl<Video> implements VideoDAO {
         JSONArray params = new JSONArray();
         params.put(0, videoId);
         params.put(1, tagId);
-        DBResult dbResult = DBQueryUtil.createEntity(DB_VIDEO_TAGS_TABLE_NAME, Arrays.asList(VideoConstants.DB_VIDEO_ID_COLUMN, TagConstants.DB_TAG_ID_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(DB_VIDEO_TAGS_TABLE_NAME, Arrays.asList(VideoConstants.DB_VIDEO_ID_COLUMN, TagConstants.DB_TAG_ID_COLUMN), params, DB_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error adding tag '{}' to video : {}  ", tagId, videoId);
             LOGGER.error(msg, dbResult.getCause());

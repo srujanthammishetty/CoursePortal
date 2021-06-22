@@ -29,19 +29,19 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
     }
 
     @Override
-    public void createUser(String name, String email, boolean isInstructor) {
+    public Long createUser(String name, String email, boolean isInstructor) {
         JSONArray params = new JSONArray();
         params.put(0, name);
         params.put(1, email);
         params.put(2, isInstructor);
-        DBResult dbResult = DBQueryUtil.createEntity(UserConstants.DB_USERS_TABLE_NAME, Arrays.asList(UserConstants.DB_USER_NAME_COLUMN, UserConstants.DB_USER_EMAIL_ID_COLUMN, UserConstants.DB_IS_INSTRUCTOR_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(UserConstants.DB_USERS_TABLE_NAME, Arrays.asList(UserConstants.DB_USER_NAME_COLUMN, UserConstants.DB_USER_EMAIL_ID_COLUMN, UserConstants.DB_IS_INSTRUCTOR_COLUMN), params, UserConstants.DB_USER_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error creating user '{}', isInstructor: {}  ", name, isInstructor);
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
         LOGGER.info("Successfully created user '{}', isInstructor ' {}' ", name, isInstructor);
-
+        return DBQueryUtil.getIdFromResult(dbResult, UserConstants.DB_USER_ID_COLUMN);
     }
 
     @Override
@@ -56,6 +56,20 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
             throw new RuntimeException(msg, dbResult.getCause());
         }
         LOGGER.info("Deleted user with emailId : {}", emailId);
+    }
+
+    @Override
+    public void deleteUserById(Long userId) {
+        String query = new StringBuilder("DELETE FROM ").append(UserConstants.DB_USERS_TABLE_NAME)
+                .append(" WHERE ").append(UserConstants.DB_USER_ID_COLUMN).append(" = ")
+                .append(userId).toString();
+        DBResult dbResult = update(query);
+        if (!dbResult.isSuccess()) {
+            String msg = Utils.getMsg("Failed to delete user with userId {}", userId);
+            LOGGER.error(msg, dbResult.getCause());
+            throw new RuntimeException(msg, dbResult.getCause());
+        }
+        LOGGER.info("Deleted user with userId: {}", userId);
     }
 
     @Override

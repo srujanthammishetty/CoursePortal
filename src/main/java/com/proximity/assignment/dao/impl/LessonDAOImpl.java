@@ -33,17 +33,18 @@ public class LessonDAOImpl extends AbstractDAOImpl<Lesson> implements LessonDAO 
     }
 
     @Override
-    public void createLesson(String name, Long userId) {
+    public Long createLesson(String name, Long userId) {
         JSONArray params = new JSONArray();
         params.put(0, name);
         params.put(1, userId);
-        DBResult dbResult = DBQueryUtil.createEntity(LessonConstants.DB_LESSON_TABLE_NAME, Arrays.asList(LessonConstants.DB_LESSON_NAME_COLUMN, Constants.UserConstants.DB_USER_ID_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(LessonConstants.DB_LESSON_TABLE_NAME, Arrays.asList(LessonConstants.DB_LESSON_NAME_COLUMN, Constants.UserConstants.DB_USER_ID_COLUMN), params, LessonConstants.DB_LESSON_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error creating lesson '{}', userId '{}'  ", name, userId);
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
         LOGGER.info("Successfully created lesson '{}' for instructor with userId '{}' ", name, userId);
+        return DBQueryUtil.getIdFromResult(dbResult, LessonConstants.DB_LESSON_ID_COLUMN);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class LessonDAOImpl extends AbstractDAOImpl<Lesson> implements LessonDAO 
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
-        LOGGER.info("Successfully deleted lesson {}", lessonId);
+        LOGGER.info("Successfully deleted lesson with lessonId {}", lessonId);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class LessonDAOImpl extends AbstractDAOImpl<Lesson> implements LessonDAO 
     @Override
     public Lesson get(Long id) {
         Lesson lesson = null;
-        DBResult dbResult = DBQueryUtil.getEntityById(LessonConstants.DB_LESSON_TABLE_NAME, LessonConstants.DB_LESSON_ID_COLUMN, id);
+        DBResult dbResult = DBQueryUtil.getEntityByEntityId(LessonConstants.DB_LESSON_TABLE_NAME, LessonConstants.DB_LESSON_ID_COLUMN, id);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error fetching lesson with lessonId '{}' ", id);
             LOGGER.error(msg, dbResult.getCause());
@@ -116,7 +117,7 @@ public class LessonDAOImpl extends AbstractDAOImpl<Lesson> implements LessonDAO 
         JSONArray params = new JSONArray();
         params.put(0, lessonId);
         params.put(1, courseId);
-        DBResult dbResult = DBQueryUtil.createEntity(DB_LESSON_COURSES_TABLE_NAME, Arrays.asList(LessonConstants.DB_LESSON_ID_COLUMN, CourseConstants.DB_COURSE_ID_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(DB_LESSON_COURSES_TABLE_NAME, Arrays.asList(LessonConstants.DB_LESSON_ID_COLUMN, CourseConstants.DB_COURSE_ID_COLUMN), params, Constants.DB_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error adding lesson '{}' to course: '{}'  ", lessonId, courseId);
             LOGGER.error(msg, dbResult.getCause());

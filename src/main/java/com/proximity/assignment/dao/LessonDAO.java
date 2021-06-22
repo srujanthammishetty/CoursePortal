@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface LessonDAO extends AbstractDAO<Lesson>{
 
-    void createLesson(String name, Long userId);
+    Long createLesson(String name, Long userId);
 
     void deleteLesson(Long lessonId);
 

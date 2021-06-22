@@ -7,7 +7,10 @@ import com.proximity.assignment.model.User;
  */
 public interface UserDAO extends AbstractDAO<User>{
 
-    void createUser(String name, String email, boolean isInstructor);
+    Long createUser(String name, String email, boolean isInstructor);
 
     void deleteUser(String emailId);
+
+    void deleteUserById(Long userId);
+
 }

@@ -118,7 +118,7 @@ public class LessonHandler implements Handler<RoutingContext> {
         Response response = new Response();
         Long lessonId = Utils.getLessonIdFromHeader(routingContext);
         lessonDAO.deleteLesson(lessonId);
-        String msg = Utils.getMsg("Lesson '{}' deleted by user '{}' ", lessonId, userId);
+        String msg = Utils.getMsg("Lesson '{}' deleted by user with userId '{}' ", lessonId, userId);
         LOGGER.info(msg);
         response.setResult(msg);
         return response;

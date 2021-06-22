@@ -29,17 +29,18 @@ public class TagDAOImpl extends AbstractDAOImpl<Tag> implements TagDAO {
     }
 
     @Override
-    public void createTag(String title, Long userId) {
+    public Long createTag(String title, Long userId) {
         JSONArray params = new JSONArray();
         params.put(0, title);
         params.put(1, userId);
-        DBResult dbResult = DBQueryUtil.createEntity(TagConstants.DB_TAGS_TABLE_NAME, Arrays.asList(TagConstants.DB_TAG_TITLE_COLUMN, UserConstants.DB_USER_ID_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(TagConstants.DB_TAGS_TABLE_NAME, Arrays.asList(TagConstants.DB_TAG_TITLE_COLUMN, UserConstants.DB_USER_ID_COLUMN), params, TagConstants.DB_TAG_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error creating tag '{}', userId '{}'  ", title, userId);
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
         LOGGER.info("Successfully created tag '{}' with userId : {}", title, userId);
+        return DBQueryUtil.getIdFromResult(dbResult, TagConstants.DB_TAG_ID_COLUMN);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class TagDAOImpl extends AbstractDAOImpl<Tag> implements TagDAO {
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
-        LOGGER.info("Successfully deleted tag {}", tagId);
+        LOGGER.info("Successfully deleted tag with tagId {}", tagId);
     }
 
     @Override
@@ -79,7 +80,7 @@ public class TagDAOImpl extends AbstractDAOImpl<Tag> implements TagDAO {
     @Override
     public Tag get(Long id) {
         Tag tag = null;
-        DBResult dbResult = DBQueryUtil.getEntityById(TagConstants.DB_TAGS_TABLE_NAME, TagConstants.DB_TAG_ID_COLUMN, id);
+        DBResult dbResult = DBQueryUtil.getEntityByEntityId(TagConstants.DB_TAGS_TABLE_NAME, TagConstants.DB_TAG_ID_COLUMN, id);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error getting details of tag : {}", id);
             LOGGER.error(msg, dbResult.getCause());

@@ -9,13 +9,15 @@ import java.util.List;
  */
 public interface CourseDAO extends AbstractDAO<Course> {
 
-    void createCourse(String courseName, Long userId);
+    Long createCourse(String courseName, Long userId);
 
     void deleteCourse(Long courseId);
 
     void updateCourse(Course course);
 
     void subscribeToCourse(Long userId, Long courseId);
+
+    List<Course> getSubscribedCourses(Long userId);
 
     void unsubscribeToCourse(Long userId, Long courseId);
 

@@ -117,7 +117,7 @@ public class CourseHandler implements Handler<RoutingContext> {
         Response response = new Response();
         Long courseId = Utils.getCourseIdFromHeader(routingContext);
         courseDAO.deleteCourse(courseId);
-        String msg = Utils.getMsg("Successfully deleted course '{}' by user '{}\"", courseId, userId);
+        String msg = Utils.getMsg("Successfully deleted course '{}' by user with userId '{}' ", courseId, userId);
         LOGGER.info(msg);
         response.setResult(msg);
         return response;

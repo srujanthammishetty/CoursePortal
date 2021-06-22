@@ -106,7 +106,7 @@ public class SubjectHandler implements Handler<RoutingContext> {
         Response response = new Response();
         Long subjectId = Utils.getSubjectIdFromHeader(routingContext);
         subjectDAO.deleteSubject(subjectId);
-        String msg = Utils.getMsg("Subject '{}' is deleted by user '{}' ", subjectId, userId);
+        String msg = Utils.getMsg("Subject '{}' is deleted by user with userId '{}' ", subjectId, userId);
         LOGGER.info(msg);
         response.setResult(msg);
         return response;

@@ -34,17 +34,18 @@ public class CourseDAOImpl extends AbstractDAOImpl<Course> implements CourseDAO 
     }
 
     @Override
-    public void createCourse(String courseName, Long userId) {
+    public Long createCourse(String courseName, Long userId) {
         JSONArray params = new JSONArray();
         params.put(0, courseName);
         params.put(1, userId);
-        DBResult dbResult = DBQueryUtil.createEntity(CourseConstants.DB_COURSES_TABLE_NAME, Arrays.asList(CourseConstants.DB_COURSE_NAME_COLUMN, UserConstants.DB_USER_ID_COLUMN), params);
+        DBResult dbResult = DBQueryUtil.createEntity(CourseConstants.DB_COURSES_TABLE_NAME, Arrays.asList(CourseConstants.DB_COURSE_NAME_COLUMN, UserConstants.DB_USER_ID_COLUMN), params, CourseConstants.DB_COURSE_ID_COLUMN);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error creating course '{}' for instructor with userId '{}'  ", courseName, userId);
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
         LOGGER.info("Successfully created course '{}' for instructor with userId '{}' ", courseName, userId);
+        return DBQueryUtil.getIdFromResult(dbResult, CourseConstants.DB_COURSE_ID_COLUMN);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class CourseDAOImpl extends AbstractDAOImpl<Course> implements CourseDAO 
             LOGGER.error(msg, dbResult.getCause());
             throw new RuntimeException(msg, dbResult.getCause());
         }
-        LOGGER.info("Successfully deleted course '{}' ", courseId);
+        LOGGER.info("Successfully deleted course with courseId '{}' ", courseId);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class CourseDAOImpl extends AbstractDAOImpl<Course> implements CourseDAO 
     @Override
     public Course get(Long courseId) {
         Course course = null;
-        DBResult dbResult = DBQueryUtil.getEntityById(CourseConstants.DB_COURSES_TABLE_NAME, CourseConstants.DB_COURSE_ID_COLUMN, courseId);
+        DBResult dbResult = DBQueryUtil.getEntityByEntityId(CourseConstants.DB_COURSES_TABLE_NAME, CourseConstants.DB_COURSE_ID_COLUMN, courseId);
         if (!dbResult.isSuccess()) {
             String msg = Utils.getMsg("Error getting course details for course '{}' ", courseId);
             LOGGER.error(msg, dbResult.getCause());
@@ -133,6 +134,26 @@ public class CourseDAOImpl extends AbstractDAOImpl<Course> implements CourseDAO 
             throw new RuntimeException(msg, dbResult.getCause());
         }
         LOGGER.info("Successfully subscribed course '{}' for user '{}' ", courseId, userId);
+    }
+
+    @Override
+    public List<Course> getSubscribedCourses(Long userId) {
+        String inQuery = new StringBuilder(" SELECT ").append(CourseConstants.DB_COURSE_ID_COLUMN).append(" FROM ")
+                .append(Constants.DB_STUDENT_COURSES_TABLE_NAME).append(" WHERE ").append(UserConstants.DB_USER_ID_COLUMN)
+                .append(" = ").append(userId).toString();
+
+        String query = new StringBuilder(" SELECT * FROM ").append(CourseConstants.DB_COURSES_TABLE_NAME)
+                .append(" WHERE ").append(CourseConstants.DB_COURSE_ID_COLUMN).append(" IN ")
+                .append(Utils.wrapWithRoundBracket(inQuery)).toString();
+        DBResult dbResult = executeQuery(query);
+        if (!dbResult.isSuccess()) {
+            String msg = Utils.getMsg("Error getting subscribed courses list for user with userId '{}' ", userId);
+            LOGGER.error(msg, dbResult.getCause());
+            throw new RuntimeException(msg, dbResult.getCause());
+
+        }
+        JSONArray result = (JSONArray) dbResult.getResult();
+        return getCourses(result);
     }
 
     @Override

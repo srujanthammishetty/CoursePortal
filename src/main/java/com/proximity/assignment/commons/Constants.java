@@ -15,6 +15,7 @@ public class Constants {
     public static final String DEPLOYMENT_PROPERTIES = "deployment.properties";
 
     public static final String DB_IS_ACTIVE_COLUMN = "is_active";
+    public static final String DB_ID_COLUMN = "id";
 
     public static final String ACTIVE_KEY = "active";
     public static final String ACTION_TYPE = "actionType";

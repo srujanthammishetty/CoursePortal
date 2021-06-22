@@ -69,7 +69,7 @@ public class TagHandler implements Handler<RoutingContext> {
         Response response = new Response();
         Long tagId = Utils.getTagIdFromHeader(routingContext);
         tagDAO.deleteTag(tagId);
-        String msg = Utils.getMsg("Tag '{}' deleted by user '{}' ", tagId, userId);
+        String msg = Utils.getMsg("Tag '{}' deleted by user with userId '{}' ", tagId, userId);
         LOGGER.info(msg);
         response.setResult(msg);
         return response;

@@ -6,6 +6,7 @@ import com.proximity.assignment.commons.DBResult;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,23 @@ public class DBServiceUtil {
         return dbResult;
     }
 
+    public static DBResult executeQueryWithParams(String query, JSONArray parameters) {
+        DBResult dbResult = new DBResult();
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            PreparedStatement prepStmt = getPreparedStatement(query, parameters, connection);
+            ResultSet resultSet = prepStmt.executeQuery();
+            dbResult.setSuccess(true);
+            dbResult.setResult(getResult(resultSet));
+        } catch (Exception e) {
+            handleQueryExecutionFailure(dbResult, e);
+        } finally {
+            closeConnection(connection);
+        }
+        return dbResult;
+    }
+
     public static DBResult executeUpdate(String query) {
         DBResult dbResult = new DBResult();
         Connection connection = null;
@@ -80,20 +98,12 @@ public class DBServiceUtil {
         return dbResult;
     }
 
-
     public static DBResult executeUpdateWithParams(String query, JSONArray parameters) {
         DBResult dbResult = new DBResult();
         Connection connection = null;
         try {
             connection = getConnection();
-            PreparedStatement prepStmt = connection.prepareStatement(query);
-            for (int i = 0; i < parameters.length(); i++) {
-                if (parameters.isNull(i)) {
-                    prepStmt.setObject(i + 1, null);
-                } else {
-                    prepStmt.setObject(i + 1, parameters.get(i));
-                }
-            }
+            PreparedStatement prepStmt = getPreparedStatement(query, parameters, connection);
             int result = prepStmt.executeUpdate();
             dbResult.setSuccess(true);
             dbResult.setResult(result);
@@ -112,7 +122,6 @@ public class DBServiceUtil {
         dbResult.setCause(e);
     }
 
-
     private static void closeConnection(Connection connection) {
         if (connection != null) {
             try {
@@ -122,7 +131,6 @@ public class DBServiceUtil {
             }
         }
     }
-
 
     private static Connection getConnection() throws SQLException {
         Connection connection = null;
@@ -138,6 +146,18 @@ public class DBServiceUtil {
         return connection;
     }
 
+
+    private static PreparedStatement getPreparedStatement(String query, JSONArray parameters, Connection connection) throws SQLException, JSONException {
+        PreparedStatement prepStmt = connection.prepareStatement(query);
+        for (int i = 0; i < parameters.length(); i++) {
+            if (parameters.isNull(i)) {
+                prepStmt.setObject(i + 1, null);
+            } else {
+                prepStmt.setObject(i + 1, parameters.get(i));
+            }
+        }
+        return prepStmt;
+    }
 
     private static JSONArray getResult(ResultSet resultSet) throws SQLException {
         JSONArray jsonArray = new JSONArray();
@@ -155,4 +175,5 @@ public class DBServiceUtil {
         }
         return jsonArray;
     }
+
 }

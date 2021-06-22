@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface VideoDAO extends AbstractDAO<Video> {
 
-    void createVideo(String title, String link, Long userId);
+    Long createVideo(String title, String link, Long userId);
 
     void deleteVideo(Long videoId);
 
