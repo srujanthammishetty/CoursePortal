@@ -66,23 +66,25 @@
     
           1) This file contains CREATE statements of all the tables required for the application. 
           2) CREATE statements are tested on PostgreSQL database. 
-          3) Based on relation database type we need to update the CREATE statements. 
+          3) Based on relation database type we may need to update the datatypes in CREATE statements. 
    
-  * DB Properties and Application port number
+  * Deployment properties
            
-       **deployment.properties**
-      
-      
-       - Need to configure below properties in deployment.properties file.
+      - **deployment.properties** file
+        
           
-          > server.port=8091 <br>
-          > db.url=          <br>
-          > db.username=     <br>
-          > db.password =    <br>
-          > db.driver.class.name=   <br>
-          > db.connection.pool.size=    <br>
+  > application.port=8091 <br>
+  > db.url=          <br>
+  > db.username=     <br>
+  > db.password =    <br>
+  > db.driver.class.name=   <br>
+  > db.connection.pool.size=    <br>
+  > db.ssl.enabled=false <br>
           
-       - deployment.properties files is present in resources folder.
+       1) Need to configure above properties in deployment.properties file. You can change the port number on which the application runs
+          by updating 'application.port' value.
+                  
+       2) deployment.properties file is present in resources folder.
               
    * JDBC Driver
         
@@ -102,4 +104,706 @@
         
         java -jar {artifactId}-{version}-fat.jar
    
+   ##APIS
+   
+   ### User 
+   
+   ### Create user
+   
+   * **URL**
+   
+     /app/portal/user   
+   * **Method**
+   
+     `POST`    
+     
+   * **Request Body**
+   
+    {
+        "name": "user1",
+        "emailId":"user1@gmail",
+        "isInstructor":true
+    }        
+
+   ### Get user
+  
+   * **URL**
+   
+        /app/portal/user
+     
+   * **Method**
+   
+        `GET`
         
+   * **Headers**          
+   
+        userId
+    
+   ### List all users
+   
+   * **URL**
+   
+        /app/portal/user/all    
+   * **Method**
+          
+        `GET`
+   * **Headers**
+   
+        userId
+    
+    
+   ***          
+   ### Course
+   
+   ### Create course
+   
+   * **URL**
+    
+        /app/portal/course
+   
+   * **Method**
+    
+       `POST`
+   * **Headers**
+        
+        userId
+   * **Request Body**
+   
+        
+        {
+            "name":"course1"
+        }         
+        
+   ### Get course
+   
+   * **URL**
+   
+        /app/portal/course     
+   
+   * **Method**
+   
+        `GET`
+        
+   * **Headers**
+        
+        userId
+        
+        courseId
+    
+   ### List all courses
+   
+   * **URL**
+   
+        /app/portal/course/all
+   
+   * **Method**
+    
+        `GET`
+        
+   * **Headers**
+   
+        userId
+    
+   ### Get all active courses
+   
+   * **URL**
+   
+        /app/portal/course/activeCourses
+        
+   * **Method**
+    
+        `GET`
+   * **Headers**
+   
+        userId
+             
+   ### Update course
+   
+   * **URL**
+    
+        /app/portal/course
+        
+   * **Method**
+        
+        `PUT`
+        
+   * **Headers**
+   
+        userId
+    
+   * **Request Body**
+   
+        
+        {
+            "courseId":1,
+            "name":"updatedName"
+        }                     
+             
+   ### Delete course
+   
+   * **URL**
+    
+        /app/portal/course
+   
+   * **Method**
+   
+        `DELETE`
+   
+   * **Headers**
+    
+        userId
+        
+        courseId          
+                                    
+   ### Subscribe to course
+   
+   * **URL**
+   
+        /app/portal/course/subscribe                                  
+        
+   * **Method**
+        
+        `PUT`
+   
+   * **Headers**
+   
+        courseId
+        
+        userId
+   
+   ### Unsubscribe to course
+   
+   * **URL**
+        
+        /app/portal/course/unsubscribe           
+   
+   * **Method**
+   
+        `PUT`
+        
+   * **Headers**               
+   
+        courseId
+        
+        userId
+   
+   ### Filter courses by subject
+   
+   * **URL**
+        
+        /app/portal/course/subject
+        
+   * **Method**
+   
+        `GET`
+   
+   * **Headers**
+        
+        userId
+        
+        subjectId
+   
+   ***
+   
+   ### Subject
+   
+   ### Create subject
+   
+   * **URL**
+        
+        /app/portal/subject
+   
+   * **Method**
+   
+        `POST`
+   
+   
+   * **Headers**
+   
+        userId          
+   
+   * **Request Body**
+        
+        
+        {
+            "name":"subject1"
+        }
+                      
+   ### Get subject
+   
+   * **URL**
+     
+       /app/portal/subject             
+   
+   * **Method**
+        
+        `GET`
+        
+   * **Headers**         
+        
+        userId
+   
+   ### Delete subject
+   
+   * **URL**
+        
+       /app/portal/subject             
+      
+   * **Method**
+   
+       `DELETE`
+           
+   * **Headers**         
+           
+        userId   
+         
+   ### Update subject
+   
+   * **URL**
+       
+       /app/portal/subject
+   
+   * **Method**
+   
+        `PUT`
+   
+   * **Headers**
+        
+        userId
+    
+   * **Request Body**
+   
+        
+        {
+            "subjectId":1,
+            "name":"updatedName"
+        }                 
+           
+   ### List all subjects
+   
+   * **URL**
+         
+        /app/portal/subject/all
+        
+   * **Method**      
+        
+        `GET`
+        
+   * **Headers**      
+        
+        userId
+        
+  ### Add subject to course
+        
+   * **URL**
+   
+        /app/portal/subject/add
+        
+   * **Method**
+   
+        `POST`
+        
+   * **Headers**
+        
+        userId
+        
+        subjectId
+        
+        courseId
+                  
+              
+  ***
+  
+  ### **Lesson**
+  
+  ###Create lesson      
+  
+  * **URL**
+  
+       /app/portal/lesson
+       
+  * **Method**
+  
+       `POST`
+   
+  * **Headers**
+         
+       userId
+ 
+  * **Request Body**
+        
+        {
+            "name":"lesson1"
+            
+        }
+        
+  ### Get lesson                    
+  
+  * **URL**
+    
+      /app/portal/lesson
+  
+  * **Method**
+    
+      `GET`
+      
+  * **Headers**
+        
+       userId
+       
+       lessonId
+  
+  ### Delete lesson
+  
+  * **URL**
+  
+       /app/portal/lesson
+  
+  * **Method**
+         
+      `DELETE`
+  
+  * **Headers**
+
+      userId
+      
+      lessonId
+                
+  
+  ### Get all lessons
+  
+  * **URL**
+  
+       /app/portal/lesson/all                 
+       
+  * **Method**
+       
+       `GET`
+  
+  * **Headers**
+  
+       userId
+        
+   ### Get active lessons in given course
+   
+   * **URL**
+    
+       /app/portal/lesson/active   
+       
+   * **Method**
+        
+        `GET`
+                    
+   * **Headers**
+        
+        userId
+        
+        courseId                     
+        
+   ### Add subject to lesson
+    
+   * **URL**
+        
+       /app/portal/lesson/add 
+        
+  * **Method**     
+            
+       `POST`
+  
+  * **Headers**
+        
+       userId
+        
+       lessonId
+        
+       subjectId
+    
+   ### Update active status of lesson in a course
+    
+   * **URL**
+    
+        /app/portal/lesson/status    
+        
+   * **Method**
+    
+       `PUT`
+    
+   * **Headers**
+    
+        userId   
+    
+   * **Request Body**
+    
+    
+         {
+             "lessonId":1,
+             "courseId":2,
+             "active":true
+         }
+          
+ 
+ ***
+ ### Tag
+ 
+   
+ 
+ ### Create tag
+ 
+ * **URL**
+     
+      /app/portal/tag
+    
+ * **Method**
+ 
+      `POST`
+ 
+ * **Headers**
+ 
+    userId
+    
+ * **Request Body**
+    
+    
+     { 
+         "title" :"tag1"
+     }   
+         
+### Get tag
+
+* **URL**
+    
+     /app/portal/tag
+     
+* **Method**
+    
+    `GET`
+ 
+* **Headers**
+
+    userId
+    tagId
+    
+### Update tag
+
+* **URL**
+    
+     /app/portal/tag
+     
+* **Method**
+    
+    `PUT`
+
+* **Headers**
+    
+    userId
+
+* **Request Body**
+
+
+    {
+            "title" :"tag1"
+    }
+                                          
+### Delete tag
+
+* **URL**
+    
+    /app/portal/tag
+    
+* **Method**
+
+    `DELETE`
+
+* **Headers**
+    
+    userId
+    
+    tagId
+ 
+### List all tags
+
+* **URL**
+    
+    /app/portal/tag/all
+    
+* **Method**
+    
+    `GET`
+ 
+* **Headers**
+    
+     userId
+****
+
+### Video
+
+### Create video
+
+* **URL**
+    
+    /app/portal/video
+
+* **Method**
+
+    `POST`
+ 
+* **Headers**
+    
+    userId
+ 
+* **Request Body**
+
+
+    {
+        "title":"video1",
+        "link":"link1"
+    }
+
+### Get video
+
+* **URL**
+    
+    /app/portal/video
+    
+* **Method**
+    
+    `GET`
+
+* **Headers**
+
+    userId
+    
+    tagId
+    
+### Delete video
+
+* **URL**
+    
+    /app/portal/video
+
+* **Method**
+    
+    `DELETE`
+
+* **Headers**
+    
+     userId
+     
+     tagId
+ 
+ ### Update video
+ 
+ * **URL**
+    
+    /app/portal/video
+    
+ * **Method**
+ 
+    `PUT`
+    
+ * **Headers**              
+    
+    userId
+    
+ * **Request Body**
+ 
+ 
+    {   
+        "videoId": "1",
+        "link" : "updatedLink", //OPTIONAL
+        "title" : "updatedTitle" //OPTIONALE
+    }       
+          
+  
+ ### List all videos
+ 
+ * **URL**
+    
+     /app/portal/video/all
+     
+ * **Method**
+ 
+      `GET`    
+ 
+ * **Headers**
+ 
+     userId
+     
+ ### Add video to lesson
+ 
+ * **URL**
+    
+     /app/portal/video/add/lesson    
+ 
+ * **Method**
+       
+      `POST`
+ 
+ * **Headers**
+    
+      userId
+      
+ * **Request Body**
+ 
+ 
+    {
+        "videoId": 1,
+        "lessonId": 2
+    }
+ 
+ ###  Add tag to video
+ 
+ * **URL**
+ 
+    /app/portal/video/add/tag
+    
+* **Method**
+    
+     `POST`
+     
+* **Headers**
+   
+     userId
+
+* **Request Body**
+
+
+    {
+        "videoId":1,
+        "tagId":2
+    }
+    
+
+### Get video by title
+
+* **URL**
+    
+    /app/portal/video/title
+    
+* **Method**
+    
+     `GET`                                                    
+
+* **Headers**
+ 
+     userId
+ 
+     title
+         
+                                                     
+### Get video by tag title
+
+* **URL**
+
+    /app/portal/video/tag
+    
+* **Method**
+    
+     `GET`    
+
+* **Headers**
+    
+     userId
+     
+     title   
+                                                 

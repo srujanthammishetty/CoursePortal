@@ -24,7 +24,11 @@ public class DBServiceUtil {
         //TODO need to think about SSL
         if (hikariDataSource == null) {
             HikariConfig hikariConfig = new HikariConfig();
-            hikariConfig.setJdbcUrl(PropertiesService.getValue(Constants.DB_URL, "jdbc:postgresql://localhost:5432/postgres"));
+            String jdbcURL = PropertiesService.getValue(Constants.DB_URL, "jdbc:postgresql://localhost:5432/postgres");
+            if (Boolean.valueOf(PropertiesService.getValue(Constants.DB_SSL_ENABLED, "false"))) {
+                jdbcURL = jdbcURL + "?tcpKeepAlive=true&sslmode=require&ssl=true";
+            }
+            hikariConfig.setJdbcUrl(jdbcURL);
             hikariConfig.setUsername(PropertiesService.getValue(Constants.DB_USERNAME, "postgres"));
             hikariConfig.setPassword(PropertiesService.getValue(Constants.DB_PASSWORD, ""));
             hikariConfig.setDriverClassName(PropertiesService.getValue(Constants.DB_DRIVER_CLASS_NAME, "org.postgresql.Driver"));

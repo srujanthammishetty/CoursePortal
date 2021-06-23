@@ -10,7 +10,8 @@ public class Constants {
     public static final String DB_PASSWORD = "db.password";
     public static final String DB_DRIVER_CLASS_NAME = "db.driver.class.name";
     public static final String DB_CONNECTION_POOL_SIZE = "db.connection.pool.size";
-    public static final String SERVER_PORT = "server.port";
+    public static final String APPLICATION_PORT = "application.port";
+    public static final String DB_SSL_ENABLED = "db.ssl.enabled";
 
     public static final String DEPLOYMENT_PROPERTIES = "deployment.properties";
 

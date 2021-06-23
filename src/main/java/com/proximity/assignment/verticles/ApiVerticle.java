@@ -168,11 +168,11 @@ public class ApiVerticle extends AbstractVerticle {
         router.get(VIDEO_API_URL_PREFIX + "/all").blockingHandler(context -> videoHandler.handle(context.put(Constants.ACTION_TYPE, ActionType.LIST_ALL)));
         //add video to lesson
         router.post(VIDEO_API_URL_PREFIX + "/add/lesson").blockingHandler(context -> videoHandler.handle(context.put(Constants.ACTION_TYPE, ActionType.ADD_VIDEO_TO_LESSON)));
-        //add video to lesson
-        router.post(VIDEO_API_URL_PREFIX + "/add/tag/").blockingHandler(context -> videoHandler.handle(context.put(Constants.ACTION_TYPE, ActionType.ADD_TAG_TO_VIDEO)));
+        //add tag to video
+        router.post(VIDEO_API_URL_PREFIX + "/add/tag").blockingHandler(context -> videoHandler.handle(context.put(Constants.ACTION_TYPE, ActionType.ADD_TAG_TO_VIDEO)));
         //get video by title
         router.get(VIDEO_API_URL_PREFIX + "/title").blockingHandler(context -> videoHandler.handle(context.put(Constants.ACTION_TYPE, ActionType.VIDEO_BY_TITLE)));
-        //add video to tag
+        //get video by tag
         router.get(VIDEO_API_URL_PREFIX + "/tag").blockingHandler(context -> videoHandler.handle(context.put(Constants.ACTION_TYPE, ActionType.VIDEO_BY_TAG)));
 
 
@@ -186,7 +186,7 @@ public class ApiVerticle extends AbstractVerticle {
         vertx.createHttpServer(httpServerOptions)
                 .requestHandler(router)
                 .listen(
-                        Integer.valueOf(PropertiesService.getValue(Constants.SERVER_PORT, "8091")),
+                        Integer.valueOf(PropertiesService.getValue(Constants.APPLICATION_PORT, "8091")),
                         httpServerFuture);
 
         return httpServerFuture;

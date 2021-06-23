@@ -40,7 +40,10 @@ public class PropertiesService {
     }
 
     public static String getValue(String key, String defaultValue) {
-        return StringUtils.defaultIfBlank(deploymentProperties.getProperty(key).trim(), defaultValue);
+        String propertyValue = deploymentProperties.getProperty(key);
+        if (propertyValue != null)
+            propertyValue = propertyValue.trim();
+        return StringUtils.defaultIfBlank(propertyValue, defaultValue);
     }
 
 }
