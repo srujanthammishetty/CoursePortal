@@ -104,7 +104,7 @@
         
         java -jar {artifactId}-{version}-fat.jar
    
-   ##APIS
+   ## API
    
    ### User 
    
@@ -168,11 +168,10 @@
         
         userId
    * **Request Body**
-   
-        
-        {
-            "name":"course1"
-        }         
+      
+         {
+           "name" : "course1"
+         }         
         
    ### Get course
    
@@ -232,12 +231,11 @@
         userId
     
    * **Request Body**
-   
         
-        {
-            "courseId":1,
-            "name":"updatedName"
-        }                     
+             {
+                "courseId":1,
+                "name":"updatedName"
+             }                     
              
    ### Delete course
    
@@ -324,10 +322,9 @@
    
    * **Request Body**
         
-        
-        {
+         {
             "name":"subject1"
-        }
+         }
                       
    ### Get subject
    
@@ -373,11 +370,10 @@
     
    * **Request Body**
    
-        
-        {
-            "subjectId":1,
-            "name":"updatedName"
-        }                 
+          {
+              "subjectId":1,
+              "name":"updatedName"
+          }                 
            
    ### List all subjects
    
@@ -416,7 +412,7 @@
   
   ### **Lesson**
   
-  ###Create lesson      
+  ### Create lesson      
   
   * **URL**
   
@@ -563,10 +559,9 @@
     
  * **Request Body**
     
-    
-     { 
-         "title" :"tag1"
-     }   
+       { 
+          "title" :"tag1"
+       }   
          
 ### Get tag
 
@@ -599,10 +594,9 @@
 
 * **Request Body**
 
-
-    {
+        {
             "title" :"tag1"
-    }
+        }
                                           
 ### Delete tag
 
@@ -653,11 +647,10 @@
  
 * **Request Body**
 
-
-    {
-        "title":"video1",
-        "link":"link1"
-    }
+       {
+           "title":"video1",
+           "link":"link1"
+        }
 
 ### Get video
 
@@ -707,12 +700,11 @@
     
  * **Request Body**
  
- 
-    {   
-        "videoId": "1",
-        "link" : "updatedLink", //OPTIONAL
-        "title" : "updatedTitle" //OPTIONALE
-    }       
+       {   
+           "videoId": "1",
+           "link" : "updatedLink", //OPTIONAL
+           "title" : "updatedTitle" //OPTIONALE
+      }       
           
   
  ### List all videos
@@ -745,11 +737,10 @@
       
  * **Request Body**
  
- 
-    {
-        "videoId": 1,
-        "lessonId": 2
-    }
+       {
+           "videoId": 1,
+           "lessonId": 2
+       }
  
  ###  Add tag to video
  
@@ -767,11 +758,10 @@
 
 * **Request Body**
 
-
-    {
-        "videoId":1,
-        "tagId":2
-    }
+       {
+           "videoId":1,
+           "tagId":2
+       }
     
 
 ### Get video by title
